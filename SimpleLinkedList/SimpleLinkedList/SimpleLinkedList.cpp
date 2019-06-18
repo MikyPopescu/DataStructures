@@ -2,6 +2,7 @@
 #include <iostream>
 #include<stdio.h>
 #include<malloc.h>
+using namespace std;
 struct Student {
 	char* nume;
 	int nrNote;
@@ -57,10 +58,10 @@ void traversare(nodls* cap) {
 	nodls* temp = cap;
 	while (temp!=NULL) {
 		printf("\nNume=%s,Nr Note=%d", temp->inf.nume, temp->inf.nrNote);
-		if (temp->inf.nrNote) {
+		if (temp->inf.nrNote>0) {
 			printf("\nNotele studentului sunt: ");
 			for (int i = 0; i < temp->inf.nrNote; i++) {
-				printf("%d", temp->inf.note[i]);
+				printf("%d ", temp->inf.note[i]);
 			}
 		}
 		temp = temp->next;
@@ -88,7 +89,9 @@ int main()
 	char buffer[20];
 
 	for (int i = 0; i < nrStudenti; i++) {
+		cin.ignore();
 		printf("\nNume student: ");
+		
 		scanf("%s", buffer);
 		s.nume = (char*)malloc((strlen(buffer) + 1) * sizeof(char));
 		strcpy(s.nume, buffer);
@@ -99,7 +102,7 @@ int main()
 		printf("\nNotele: ");
 		s.note = (int*)malloc(s.nrNote * sizeof(int));
 		for (int j = 0; j < s.nrNote; j++) {
-			scanf("%d", &s.note[i]);
+			scanf("%d", &s.note[j]);
 		}
 		//cap = inserareInceput(cap,s);
 		cap = inserareFinal(cap, s);
