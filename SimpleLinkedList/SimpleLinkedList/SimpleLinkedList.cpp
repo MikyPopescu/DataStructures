@@ -3,18 +3,17 @@
 #include <iostream>
 #include<stdio.h>
 #include<malloc.h>
-struct student {
-	int id;
+struct Student {
 	char* name;
 	int noGrades;
 	int* grades;
 };
 struct node {
-	student inf;
+	Student inf;
 	node* next;
 };
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	Student s;
 }
 
