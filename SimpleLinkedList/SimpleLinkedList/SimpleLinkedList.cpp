@@ -78,6 +78,9 @@ void dezalocare(nodls* cap) {
 		temp = temp2;
 	}
 }
+
+
+
 //no of Elements
 int nrNodLS(nodls* cap) {
 	int nr = 0;
@@ -263,6 +266,9 @@ int stergereLSPozitie(nodls** cap, int poz) {
 	}
 	return gasit == 1 ? 0 : -2;
 }
+//Sa se numere studentii din lista care au numarul de note >= decat o valoare data de la tastatura
+
+//Sa se calculeze media fiecarui student din lista
 
 int main()
 {
@@ -297,10 +303,6 @@ int main()
 
 	sortareListaSimpla(cap);
 	traversare(cap);
-
-
-
-
 
 	//testam stergerile
 	printf("\nAfisarea listei initiale:");
