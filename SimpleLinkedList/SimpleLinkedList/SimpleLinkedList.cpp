@@ -78,6 +78,43 @@ void dezalocare(nodls* cap) {
 		temp = temp2;
 	}
 }
+//no of Elements
+int nrNodLS(nodls* cap) {
+	int nr = 0;
+	nodls* temp = cap;
+	while (temp!=NULL) {
+		nr++;
+		temp = temp->next;
+	}
+	return nr;
+}
+
+//convert: List to Array
+void convert(nodls** cap, Student** vect, int *nr) {
+	nodls* temp = *cap;
+	
+	while (temp != NULL) {
+
+		Student* copie = (Student*)malloc((*nr) * sizeof(Student));
+		for (int i = 0; i < *nr; i++) {
+			copie[i] = (*vect)[i];
+		}
+		*vect = (Student*)malloc((*nr + 1) * sizeof(Student));
+		(*nr)++;
+		for (int i = 0; i < *nr - 1; i++) {
+			(*vect)[i] = copie[i];
+		}
+		(*vect)[*nr - 1] = temp->inf;
+		nodls* temp2 = temp;
+		temp = temp->next;
+		free(temp2);
+		*cap = NULL;
+	}
+
+
+}
+
+//delete node
 int main()
 {
 	int nrStudenti;
@@ -108,6 +145,19 @@ int main()
 		cap = inserareFinal(cap, s);
 	}
 	traversare(cap);
+
+
+	
+	Student* vect = NULL;
+	int nr = 0;
+	convert(&cap, &vect, &nr);
+	for (int i = 0; i < nr; i++) {
+		printf("\nNume=%s ", vect[i].nume);
+	}
+	for (int i = 0; i < nr; i++) {
+		free(vect[i].nume);
+	}
+	free(vect);
 	dezalocare(cap);
 
 }
