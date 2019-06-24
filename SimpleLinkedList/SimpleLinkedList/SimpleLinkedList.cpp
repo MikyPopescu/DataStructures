@@ -88,7 +88,20 @@ int nrNodLS(nodls* cap) {
 	}
 	return nr;
 }
+//nodul de pe o pozitie data
+nodls* nodDePePoz(nodls* cap, int poz) {
+	nodls* temp = cap;
+	int nr = 0;
+	while (temp) {
+		if (nr == poz) {
+			return temp;
+		}
+		temp = temp->next;
+		nr++;
+	}
+	return NULL;
 
+}
 //convert: List to Array
 void convert(nodls** cap, Student** vect, int *nr) {
 	nodls* temp = *cap;
@@ -113,8 +126,158 @@ void convert(nodls** cap, Student** vect, int *nr) {
 
 
 }
+//list sort
+void sortareListaSimpla(nodls* cap) {
+	int n = nrNodLS(cap);
+	for (int i = 0; i < n - 1; i++) {
+		nodls* temp = nodDePePoz(cap, i);
+		for (int j = i + 1; j < n; j++) {
+			nodls* temp2 = nodDePePoz(cap, j);
+			if (temp->inf.nrNote > temp2->inf.nrNote) {
+				Student aux = temp->inf;
+				temp->inf = temp2->inf;
+				temp2->inf = aux;
+			}
+		}
+	}
+}
+//calculeaza media 
+float* calcMedie(nodls* cap) {
+	float* vectMedii = (float*)malloc(nrNodLS(cap) * sizeof(float));
+	int nr = 0;
+	nodls* temp = cap;
+	while (temp != NULL) {
+		float S = 0;
+		for (int i = 0; i < temp->inf.nrNote; i++) {
+			S += temp->inf.note[i];
+		}
+		vectMedii[nr] = S / temp->inf.nrNote;
+		nr++;
+		temp = temp->next;
+	}
+	return vectMedii;
+}
+//cautare element in lista
+nodls* cautaElemLS(nodls* cap, int poz) {
+	int n = nrNodLS(cap);
+	int i = 1;
+	if (poz > n || poz < 1) {
+		printf("\nNu exista pozitia in lista!");
+	}
+	else {
+		nodls* temp = cap;
+		while (i < n - poz + 1) {
+			temp = temp->next;
+			i++;
+		}
+		return temp;
+	}
+	return NULL;
+}
 
 //delete node
+//0 a sters/ -1 nu a sters/ lista goala
+int stergereLS_inceput(nodls* cap) {
+	if (cap == NULL) {
+		return -1;
+	}
+	else {
+		nodls* deSters = cap;
+		cap = cap->next;
+		free(deSters->inf.nume);
+		free(deSters->inf.note);
+		free(deSters);
+	}
+}
+int stergereLs_final(nodls* cap) {
+	if (cap == NULL) {
+		return -1;
+	}
+	else if (cap->next == NULL) { //lista are un singur element
+		stergereLS_inceput(cap); 
+	}
+	else {
+		//am mai multe elemente in lista
+		nodls* deSters = cap;
+		nodls* anterior = deSters;
+		while (deSters->next != NULL) {
+			anterior = deSters;
+			deSters = deSters->next;
+		}
+		anterior->next = NULL;
+		free(deSters->inf.nume);
+		free(deSters->inf.note);
+		free(deSters);
+	}
+}
+//stergerea unui Student dupa numarul de note(in loc de cod/id)
+//0 a sters/ -1 lista e goala/ -2 nu exista
+int stergereLSId(nodls* cap, int nr) {
+	int gasit = 0;
+	if (cap == NULL) {
+		return -1;
+	}
+	//primul element este cel cautat
+	if (cap->inf.nrNote == nr) {
+		gasit = 1;
+		stergereLS_inceput(cap);
+	}
+
+	else{
+		nodls* deSters = cap->next;
+		nodls* anterior = cap;
+		while (deSters != NULL && !gasit) {
+			if (deSters->inf.nrNote == nr) {
+				gasit = 1;
+				anterior->next = deSters->next;
+				free(deSters->inf.nume);
+				free(deSters->inf.note);
+				free(deSters);
+			}
+			anterior = deSters;
+			deSters = deSters->next;
+		}
+	
+	}
+	return gasit == 1 ? 0 : -2;
+}
+
+//sterge de pe pozitie
+//0 a sters/-1 lista goala/ -2 pozitie inexistenta
+int stergereLSPozitie(nodls* cap, int poz) {
+	int gasit = 0;
+	int nrElemente = nrNodLS(cap);
+	if (cap == NULL) {
+		return -1;
+	}
+	else if (poz < 0 || poz >= nrElemente) {
+		return -2;
+	}
+	else if (poz == 0) {
+		gasit = 1;
+		stergereLS_inceput(cap);
+	}
+	else {
+		int index = 1;
+		nodls* deSters = cap->next;
+		nodls* anterior = cap;
+		while (deSters != NULL && !gasit) {
+			if (index == poz) {
+				gasit = 1;
+				anterior->next = deSters->next;
+				free(deSters->inf.nume);
+				free(deSters->inf.note);
+				free(deSters);
+			}
+			index++;
+			anterior = deSters;
+			deSters = deSters->next;
+		}
+
+	}
+	return gasit == 1 ? 0 : -2;
+}
+
 int main()
 {
 	int nrStudenti;
@@ -146,7 +309,28 @@ int main()
 	}
 	traversare(cap);
 
+	/*sortareListaSimpla(cap);
+	traversare(cap);*/
 
+	//printf("\n-----------------Medii Studenti-----------");
+	//float* vectorMedii = calcMedie(cap);
+	//for (int i = 0; i < 3; i++) {
+	//	printf("\n%5.2f ", vectorMedii[i]);
+	//}
+	//free(vectorMedii);
+
+
+
+	//testam stergerile
+	printf("\nAfisarea listei initiale:");
+	traversare(cap);
+	stergereLS_inceput(cap);//crapa
+	stergereLs_final(cap);
+	stergereLSPozitie(cap,1);//crapa la pozitia 0
+	stergereLSId(cap, 3);//crapa
+	printf("\nAfisarea listei finale:");
+	traversare(cap);
+	
 	
 	Student* vect = NULL;
 	int nr = 0;
