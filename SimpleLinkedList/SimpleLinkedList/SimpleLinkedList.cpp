@@ -12,7 +12,11 @@ struct nodls {
 	Student inf;
 	nodls* next;
 };
-
+struct nodld {
+	Student inf;
+	nodld* next;
+	nodld* prev;
+};
 //create a node
 nodls* creezNod(Student s) {
 	nodls* nou = (nodls*)malloc(sizeof(nodls));
@@ -129,6 +133,7 @@ void convert(nodls** cap, Student** vect, int *nr) {
 
 
 }
+
 //list sort
 void sortareListaSimpla(nodls* cap) {
 	int n = nrNodLS(cap);
@@ -266,6 +271,50 @@ int stergereLSPozitie(nodls** cap, int poz) {
 	}
 	return gasit == 1 ? 0 : -2;
 }
+
+//convert: LS to LD --problema la adaugarea in lista dubla
+nodld* conversieListaDubla(nodls** cap) {
+	nodld* capLD = NULL;
+	while (*cap != NULL) {
+		nodld* nou = (nodld*)malloc(sizeof(nodld));
+		nou->inf.nume = (char*)malloc((strlen((*cap)->inf.nume) + 1) * sizeof(char));
+		strcpy(nou->inf.nume, (*cap)->inf.nume);
+		nou->inf.nrNote = (*cap)->inf.nrNote;
+		nou->inf.note = (int*)malloc((*cap)->inf.nrNote * sizeof(int));
+		for (int i = 0; i < (*cap)->inf.nrNote; i++) {
+			nou->inf.note[i] = (*cap)->inf.note[i];
+		}
+		nou->next = NULL;
+		nou->prev = NULL;
+		capLD = nou;
+		stergereLS_inceput(cap);
+		nodld* tempLD = capLD;
+		while (*cap) {
+			nodld* nou = (nodld*)malloc(sizeof(nodld));
+			nou->inf.nume = (char*)malloc((strlen((*cap)->inf.nume) + 1) * sizeof(char));
+			strcpy(nou->inf.nume, (*cap)->inf.nume);
+			nou->inf.nrNote = (*cap)->inf.nrNote;
+			nou->inf.note = (int*)malloc((*cap)->inf.nrNote * sizeof(int));
+			for (int i = 0; i < (*cap)->inf.nrNote; i++) {
+				nou->inf.note[i] = (*cap)->inf.note[i];
+			}
+			nou->next = NULL;
+			nou->prev = NULL;
+			tempLD->next = nou;
+			nou->prev = tempLD;
+			tempLD = tempLD->next;
+			stergereLS_inceput(cap);
+		}
+	}
+	return capLD;
+}
+void traversareLD(nodld* cap) {
+	nodld* temp = cap;
+	while (temp != NULL) {
+		printf("\nStudentul %s ", temp->inf.nume);
+		temp = temp->next;
+	}
+}
 //Sa se numere studentii din lista care au numarul de note >= decat o valoare data de la tastatura
 
 //Sa se calculeze media fiecarui student din lista
@@ -325,7 +374,16 @@ int main()
 		free(vect[i].nume);
 	}
 	free(vect);
-	dezalocare(cap);
+
+	//test conversie ls-ld 
+	nodld* capLD = conversieListaDubla(&cap);
+	printf("\nLista dubla: ");
+	traversareLD(capLD); //nu apare nimic?!
+	if (cap == NULL) {
+		printf("\nLista simpla a fost stearsa");
+	}
+	
+	//dezalocare(cap);
 
 }
 
