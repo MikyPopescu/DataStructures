@@ -272,6 +272,15 @@ int stergereLSPozitie(nodls** cap, int poz) {
 	return gasit == 1 ? 0 : -2;
 }
 
+
+
+
+
+
+
+
+
+
 //convert: LS to LD --problema la adaugarea in lista dubla
 nodld* conversieListaDubla(nodls** cap) {
 	nodld* capLD = NULL;
