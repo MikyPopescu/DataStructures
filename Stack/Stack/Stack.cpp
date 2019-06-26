@@ -15,7 +15,10 @@ struct nodStiva {
 	Student inf;
 	nodStiva* next;
 };
-
+struct nodls {
+	Student inf;
+	nodls* next;
+};
 nodStiva* creezNod(Student s) {
 	nodStiva* nou = (nodStiva*)malloc(sizeof(nodStiva));
 	nou->inf.nume = (char*)malloc((strlen(s.nume) + 1) * sizeof(char));
@@ -86,6 +89,64 @@ void dezalocare(nodStiva* varf) {
 		temp = temp2;
 	}
 }
+
+//conversie stiva vector
+void conversieVector(nodStiva** varf, Student* vect, int* nr) {
+	Student aux;
+	while (pop(varf, &aux) == 0) {
+		vect[*nr] = aux;
+		(*nr)++;
+	}
+}
+
+//conversie stiva lista simpla
+void inserareLS(nodls** cap, Student s) {
+	nodls* nou =(nodls*)malloc(sizeof(nodls));
+	nou->inf.nume = (char*)malloc((strlen(s.nume) + 1) * sizeof(char));
+	strcpy(nou->inf.nume, s.nume);
+	nou->inf.nrNote = s.nrNote;
+	nou->inf.note = (int*)malloc(s.nrNote * sizeof(int));
+	for (int i = 0; i < s.nrNote; i++) {
+		nou->inf.note[i] = s.note[i];
+	}
+	nou->next = NULL;
+	if (*cap == NULL) {
+		*cap = nou;
+	}
+	else {
+		nodls* temp = *cap;
+		while (temp->next != NULL) {
+			temp = temp->next;
+		}
+		temp->next = nou;
+	}
+}
+
+void traversareLS(nodls* cap) {
+	nodls* temp = cap;
+	while (temp != NULL) {
+		printf("\nNume=%s,Nr Note=%d", temp->inf.nume, temp->inf.nrNote);
+		if (temp->inf.nrNote > 0) {
+			printf("\nNotele studentului sunt: ");
+			for (int i = 0; i < temp->inf.nrNote; i++) {
+				printf("%d ", temp->inf.note[i]);
+			}
+		}
+		temp = temp->next;
+	}
+}
+
+void dezalocareLS(nodls** cap) {
+	nodls* temp = *cap;
+	while (temp != NULL) {
+		nodls* temp2 = temp->next;
+		free(temp->inf.nume);
+		free(temp->inf.note);
+		free(temp);
+		temp = temp2;
+	}
+}
+
 int main()
 {
 	nodStiva* varf = NULL;
@@ -118,6 +179,32 @@ int main()
 	push(&varf, b);
 	push(&varf, c);
 	traversare(varf);
+
+	//vector
+	int nr = 0;
+	Student* vect = (Student*)malloc(10 * sizeof(Student));
+	conversieVector(&varf, vect, &nr);
+	for (int i = 0; i < nr; i++) {
+		printf("\nNume %s are %d note ", vect[i].nume, vect[i].nrNote);
+	}
+	for (int i = 0; i < nr; i++) {
+		free(vect[i].note);
+		free(vect[i].nume);
+	}
+	free(vect);
+
+	//LS
+	nodls* cap = NULL;
+	inserareLS(&cap, a);
+	traversareLS(cap);
+	dezalocareLS(&cap);
+
+
+
+
+
+
+
 	dezalocare(varf);
 }
 
