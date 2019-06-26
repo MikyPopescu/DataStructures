@@ -43,7 +43,7 @@ void push(nodStiva** varf, Student s) {
 
 int pop(nodStiva** varf, Student* s) {
 	if (*varf == NULL) {
-		return -1; 
+		return -1;
 	}
 	else {
 		(*s).nume = (char*)malloc((strlen((*varf)->inf.nume) + 1) * sizeof(char));
@@ -103,7 +103,7 @@ int main()
 	b.nrNote = 3;
 	b.note = (int*)malloc(b.nrNote * sizeof(int));
 	b.note[0] = 6;
-	b.note[1] =5;
+	b.note[1] = 5;
 	b.note[2] = 5;
 
 	c.nume = (char*)malloc((strlen("Nume 3") + 1) * sizeof(char));

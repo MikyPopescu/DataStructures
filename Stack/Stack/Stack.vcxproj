@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{CFD43D09-CF60-4F94-A5DB-267B5DA07988}</ProjectGuid>
+    <ProjectGuid>{2D85A8E3-8F79-4ED3-9057-D86442E9C132}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Stack</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
