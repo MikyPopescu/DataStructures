@@ -165,6 +165,8 @@ Student cautareHashT(hashT tabela, int cod) {
 	s.note = NULL;
 	return s;
 }
+
+
 int main()
 {
 	hashT tabela;
@@ -209,10 +211,14 @@ int main()
 
 	traversare(tabela);
 	printf("\n----------------Stergere-----------------\n");
-	//stergere(tabela, 2);
-	//traversare(tabela);
+	stergere(tabela, 2);
+	traversare(tabela);
 	printf("\n----------------Cautare-----------------\n");
-	Student s=cautareHashT(tabela, 2);
+	Student s=cautareHashT(tabela, 1);
 	cout << s.nume;
+
+
+	
+	
 	dezalocare(tabela);
 }

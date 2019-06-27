@@ -153,10 +153,6 @@ int main()
 	extragere(&h, &elem);
 	printf("\nElement extras are codul %d si numele %s" , elem.cod, elem.nume);
 
-
-
-
-
 	Student* vectSortat = (Student*)malloc(h.nrElem * sizeof(Student));
 	int n = h.nrElem;
 	int m = h.nrElem;
