@@ -90,7 +90,81 @@ void dezalocare(hashT tabela) {
 	free(tabela.vect);
 }
 //stergere
+int stergere(hashT tabela, int cod) {
+	int pozitie;
+	if (tabela.vect) {
+		pozitie = functieHash(tabela, cod);
+		if (tabela.vect[pozitie] == NULL) {
+			return -1;
+		}
+		else {
+			//am introdus un cod care deja exista
+
+			//poate fi primul
+			if (tabela.vect[pozitie]->inf.cod == cod) {
+				if (tabela.vect[pozitie]->next == NULL) { //daca e singurul nod
+					nodls* temp = tabela.vect[pozitie];
+					free(temp->inf.nume);
+					free(temp->inf.note);
+					free(temp);
+					tabela.vect[pozitie] = NULL;
+				}
+				else {
+					//mai exista noduri dupa el
+					nodls* temp = tabela.vect[pozitie];
+					tabela.vect[pozitie] = temp->next;
+					free(temp->inf.nume);
+					free(temp->inf.note);
+					free(temp);
+				}
+			}
+			else {
+				//nu e primul
+				nodls* temp = tabela.vect[pozitie];
+				//stergerea unui nod dintr-o lista simpla
+				while (temp->next != NULL && temp->next->inf.cod != cod) {
+					//ma pozitionez pe nodul de dinaintea nodului de sters
+					temp = temp->next;
+				}
+				nodls* deSters = temp->next;
+				if (deSters->next != NULL) {
+					//mai exista noduri dupa el
+					temp->next = deSters->next;
+					free(deSters->inf.nume);
+					free(deSters->inf.note);
+					free(deSters);
+				}
+				else {
+					//nu mai are noduri dupa el
+					temp->next = NULL;
+					free(deSters->inf.nume);
+					free(deSters->inf.note);
+					free(deSters);
+				}
+			}
+		}
+	}
+}
 //cautare
+Student cautareHashT(hashT tabela, int cod) {
+	if (tabela.vect) {
+		int poz = functieHash(tabela, cod);
+
+		nodls* temp = tabela.vect[poz];
+		while (temp && temp->inf.cod != cod) {
+			temp = temp->next;
+		}
+		if (temp) {
+			return temp->inf;
+		}
+	}
+	Student s;
+	s.cod = -1;
+	s.nume = NULL;
+	s.nrNote = -1;
+	s.note = NULL;
+	return s;
+}
 int main()
 {
 	hashT tabela;
@@ -134,5 +208,11 @@ int main()
 	inserare(tabela, c);
 
 	traversare(tabela);
+	printf("\n----------------Stergere-----------------\n");
+	//stergere(tabela, 2);
+	//traversare(tabela);
+	printf("\n----------------Cautare-----------------\n");
+	Student s=cautareHashT(tabela, 2);
+	cout << s.nume;
 	dezalocare(tabela);
 }
