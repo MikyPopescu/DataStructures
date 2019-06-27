@@ -46,6 +46,47 @@ void afisare(Heap h) {
 }
 
 
+void inserare(Heap*h, Student elem) {
+	Student* vect1 = (Student*)malloc(((*h).nrElem + 1) * sizeof(Student));
+
+	for (int i = 0; i < (*h).nrElem; i++) {
+		vect1[i] = (*h).vect[i];
+	}
+
+	vect1[(*h).nrElem] = elem;
+	(*h).nrElem++;
+
+	free((*h).vect);
+	(*h).vect = vect1;
+
+	for (int i = ((*h).nrElem - 1) / 2; i >= 0; i--) {
+		filtrare(*h, i);
+	}
+}
+
+void extragere(Heap* h, Student* elem) {
+	Student* vect1 = (Student*)malloc(((*h).nrElem - 1) * sizeof(Student));
+	
+	//interschimbare primul elem cu ult
+	Student aux = (*h).vect[0];
+	(*h).vect[0] = (*h).vect[(*h).nrElem - 1];
+	(*h).vect[(*h).nrElem - 1] = aux;
+
+	*elem = (*h).vect[(*h).nrElem - 1];
+
+	for (int i = 0; i < (*h).nrElem - 1; i++) {
+		vect1[i] = (*h).vect[i];
+	}
+
+	(*h).nrElem--;
+	free((*h).vect);
+	(*h).vect = vect1;
+
+	for (int i = ((*h).nrElem - 1) / 2; i >= 0; i--) {
+		filtrare(*h, i);
+	}
+}
+
 int main()
 {
 	Heap h;
@@ -81,8 +122,61 @@ int main()
 	c.note[1] = 4;
 	c.note[2] = 8;
 
+
+	h.vect[0] = a;
+	h.vect[1] = b;
+	h.vect[2] = c;
+
+
 	for (int i = (h.nrElem - 1) / 2; i >= 0; i--) {
 		filtrare(h, i);
 	}
 	afisare(h);
+
+//test inserare
+	Student s;
+	s.cod = 100;
+	s.nume = (char*)malloc((strlen("Marcel") + 1) * sizeof(char));
+	strcpy(s.nume, "Marcel");
+	s.nrNote = 5;
+	s.note = (int*)malloc(s.nrNote * sizeof(int));
+	s.note[0] = 10;
+	s.note[1] = 4;
+	s.note[2] = 8;
+	s.note[3] = 10;
+	s.note[4] = 8;
+	inserare(&h, s);
+	afisare(h);
+
+//test extragere
+	Student elem;
+	extragere(&h, &elem);
+	printf("\nElement extras are codul %d si numele %s" , elem.cod, elem.nume);
+
+
+
+
+
+	Student* vectSortat = (Student*)malloc(h.nrElem * sizeof(Student));
+	int n = h.nrElem;
+	int m = h.nrElem;
+	for (int i = 0; i < n; i++) {
+		extragere(&h, &elem);//scot elem din heap
+		vectSortat[i] = elem;//il bag in vect sortat 
+		//la final vect va fi sortat descresc
+	}
+	printf("\nVector sortat: ");
+	for (int i = 0; i < n; i++) {
+		printf("%d ", vectSortat[i].cod);
+	}
+
+	//crapa la eliberare
+	for (int i = 0; i < m; i++) {
+		
+		//free(h.vect[i].nume);
+		//free(h.vect[i].note);
+	}
+	//free(h.vect);
+//	free(vectSortat);
+
 }
