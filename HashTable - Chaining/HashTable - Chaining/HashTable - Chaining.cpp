@@ -168,34 +168,7 @@ Student cautareHashT(hashT tabela, int cod) {
 	}
 	
 }
-//cautare dupa char* nume
-//Student cautareHashT2(hashT tabela, char* numeStudent) {
-//	if (tabela.vect) {
-//		for (int i = 0; i < tabela.size; i++) {
-//			int poz = functieHash(tabela, i);
-//			if (strcmp(tabela.vect[poz]->inf.nume, tabela.vect[i]->inf.nume) == 0) {
-//				
-//				return tabela.vect[poz]->inf;
-//			}
-//			nodls*temp = tabela.vect[poz];
-//			while (temp && strcmp(tabela.vect[poz]->inf.nume, tabela.vect[i]->inf.nume) == 0) {
-//				temp = temp->next;
-//			}
-//			if (temp) {
-//				return temp->inf;
-//			}
-//		}
-//			
-//}
-//	else {
-//		Student s;
-//		s.cod = -1;
-//		s.nume = NULL;
-//		s.nrNote = -1;
-//		s.note = NULL;
-//		return s;
-//	}
-//}
+
 
 int main()
 {

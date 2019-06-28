@@ -92,7 +92,7 @@ Moneda cautareHashT(hashT tabela, char* cod,int soldSpecificat) {
 		int poz = functieHash(tabela, cod);
 
 		nodls* temp = tabela.vect[poz];
-		while (temp && temp->inf.sold != soldSpecificat) {
+		while (temp && temp->inf.sold <= soldSpecificat) {
 			temp = temp->next;
 		}
 		if (temp) {
