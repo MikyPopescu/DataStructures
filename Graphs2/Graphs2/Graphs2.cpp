@@ -1,3 +1,4 @@
+#include"pch.h"
 #include <stdio.h>
 #include<string.h>
 #include<malloc.h>
@@ -248,10 +249,10 @@ void main()
 	for (int i = 0; i < nrArce; i++)
 	{
 		int idStart;
-		printf("Id-ul nodului de start: ");
+		printf("Sursa: ");
 		scanf("%d", &idStart);
 		int idStop;
-		printf("Id-ul nodului de stop: ");
+		printf("Destinatie: ");
 		scanf("%d", &idStop);
 		inserareArcInGraf(graf, idStart, idStop);
 	}
