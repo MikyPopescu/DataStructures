@@ -307,8 +307,8 @@ nodld* conversieListaDubla(nodls** cap) {
 			for (int i = 0; i < (*cap)->inf.nrNote; i++) {
 				nou->inf.note[i] = (*cap)->inf.note[i];
 			}
-			nou->next = NULL;
-			nou->prev = NULL;
+			/*nou->next = NULL;
+			nou->prev = NULL;*/
 			tempLD->next = nou;
 			nou->prev = tempLD;
 			tempLD = tempLD->next;

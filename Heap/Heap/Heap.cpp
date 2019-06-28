@@ -161,18 +161,24 @@ int main()
 		vectSortat[i] = elem;//il bag in vect sortat 
 		//la final vect va fi sortat descresc
 	}
-	printf("\nVector sortat: ");
-	for (int i = 0; i < n; i++) {
-		printf("%d ", vectSortat[i].cod);
-	}
 
-	
-	for (int i = 0; i < m; i++) {
-		//crapa la eliberare
-		//free(h.vect[i].nume);
-		//free(h.vect[i].note);
-	}
-	free(h.vect);
-	free(vectSortat);
+
+	/*printf("\nAfisare dupa extragere\n");
+	afisare(h);*/
+
+
+	//printf("\nVector sortat: ");
+	//for (int i = 0; i < n; i++) {
+	//	printf("%d ", vectSortat[i].cod);
+	//}
+
+	//
+	//for (int i = 0; i < m; i++) {
+	//	//crapa la eliberare
+	//	//free(h.vect[i].nume);
+	//	//free(h.vect[i].note);
+	//}
+	//free(h.vect);
+	//free(vectSortat);
 
 }

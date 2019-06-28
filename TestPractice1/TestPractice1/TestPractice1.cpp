@@ -2,6 +2,7 @@
 #include <iostream>
 #include<stdio.h>
 #include<malloc.h>
+
 struct Moneda {
 	char cod[5];
 	char* denumire;
