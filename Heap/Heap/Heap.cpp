@@ -166,13 +166,13 @@ int main()
 		printf("%d ", vectSortat[i].cod);
 	}
 
-	//crapa la eliberare
+	
 	for (int i = 0; i < m; i++) {
-		
+		//crapa la eliberare
 		//free(h.vect[i].nume);
 		//free(h.vect[i].note);
 	}
-	//free(h.vect);
-//	free(vectSortat);
+	free(h.vect);
+	free(vectSortat);
 
 }

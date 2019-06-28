@@ -145,7 +145,7 @@ int stergere(hashT tabela, int cod) {
 		}
 	}
 }
-//cautare
+//cautare dupa int cod
 Student cautareHashT(hashT tabela, int cod) {
 	if (tabela.vect) {
 		int poz = functieHash(tabela, cod);
@@ -158,14 +158,44 @@ Student cautareHashT(hashT tabela, int cod) {
 			return temp->inf;
 		}
 	}
-	Student s;
-	s.cod = -1;
-	s.nume = NULL;
-	s.nrNote = -1;
-	s.note = NULL;
-	return s;
+	else {
+		Student s;
+		s.cod = -1;
+		s.nume = NULL;
+		s.nrNote = -1;
+		s.note = NULL;
+		return s;
+	}
+	
 }
-
+//cautare dupa char* nume
+//Student cautareHashT2(hashT tabela, char* numeStudent) {
+//	if (tabela.vect) {
+//		for (int i = 0; i < tabela.size; i++) {
+//			int poz = functieHash(tabela, i);
+//			if (strcmp(tabela.vect[poz]->inf.nume, tabela.vect[i]->inf.nume) == 0) {
+//				
+//				return tabela.vect[poz]->inf;
+//			}
+//			nodls*temp = tabela.vect[poz];
+//			while (temp && strcmp(tabela.vect[poz]->inf.nume, tabela.vect[i]->inf.nume) == 0) {
+//				temp = temp->next;
+//			}
+//			if (temp) {
+//				return temp->inf;
+//			}
+//		}
+//			
+//}
+//	else {
+//		Student s;
+//		s.cod = -1;
+//		s.nume = NULL;
+//		s.nrNote = -1;
+//		s.note = NULL;
+//		return s;
+//	}
+//}
 
 int main()
 {
@@ -214,8 +244,11 @@ int main()
 	stergere(tabela, 2);
 	traversare(tabela);
 	printf("\n----------------Cautare-----------------\n");
-	Student s=cautareHashT(tabela, 1);
-	cout << s.nume;
+	//Student s=cautareHashT(tabela, 1);
+	//cout << s.nume;
+	/*char buf[20];
+	Student s = cautareHashT2(tabela, buf);
+	cout << s.cod;*/
 
 
 	

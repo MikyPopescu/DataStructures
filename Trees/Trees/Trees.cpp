@@ -2,11 +2,6 @@
 #include <iostream>
 #include<stdio.h>
 #include<malloc.h>
-//Arbore= graf complex +aciclic
-//Arbore binar= abore care are cel mult 2 fii (are 0,1 sau 2 fii)
-//ABC Arbori
-//Arbore binar de cautare= arbore binar in care nodurile sunt asezate ai sa respecte proprietatea: stanga noduri cu valori mai mici decat nodul considerat radacina, dreapta noduri cu valori mai mari decat nodul considerat radacina
-//AVL Arbori
 struct Student {
 	int cod; //cheie
 	char* nume;
@@ -18,6 +13,12 @@ struct nodArb {
 	nodArb* left, *right;
 	int BF; //pt AVL
 };
+
+//ABC Arbori
+//Arbore= graf complex +aciclic
+//Arbore binar= abore care are cel mult 2 fii (are 0,1 sau 2 fii)
+//Arbore binar de cautare= arbore binar in care nodurile sunt asezate ai sa respecte proprietatea: stanga noduri cu valori mai mici decat nodul considerat radacina, dreapta noduri cu valori mai mari decat nodul considerat radacina
+
 //creez nod
 nodArb* creare(Student s, nodArb* st, nodArb* dr) {
 	nodArb* nou = (nodArb*)malloc(sizeof(nodArb));
@@ -138,21 +139,21 @@ int nrNiveluri(nodArb* rad) {
 
 //cautare
 nodArb* cautare(nodArb* rad,int cheie){
-	if (rad != NULL) {
-		if (rad->inf.cod == cheie) {
+	if (rad != NULL) { //verific daca am unde sa caut
+		if (rad->inf.cod == cheie) {//daca informatia din radacina este = cu cheia
 			return rad;
 		}
 		else {
-			if (cheie < rad->inf.cod) {
+			if (cheie < rad->inf.cod) {  //caut in stanga
 				return cautare(rad->left, cheie);
 			}
 			else {
-				return cautare(rad->right, cheie);
+				return cautare(rad->right, cheie); //caut in dreapta
 			}
 		}
 	}
 	else {
-		return NULL;
+		return NULL; //returnez arbore null
 	}
 }
 
@@ -165,6 +166,159 @@ void conversieVector(nodArb* rad, Student* vect, int* nr) {
 		conversieVector(rad->right, vect, nr);
 	}
 }
+
+//ABC Echilibrati/Arbori AVL= ABC + elem sortate (cand apare un dezechilibru=> trebuie sa echilibram)
+//calcul factor de balans
+void calculBF(nodArb* rad) {
+	if (rad != NULL) {
+		//h(SD)-h(SS)
+		rad->BF = nrNiveluri(rad->right) - nrNiveluri(rad->left);
+		calculBF(rad->left);
+		calculBF(rad->right);
+	}
+}
+
+nodArb* rotatie_dreapta(nodArb* rad) {
+	printf("\nRotatie dreapta\n");
+	nodArb* nod1 = rad->left;
+	rad->left = nod1->right;
+	nod1->right = rad;
+	rad = nod1;
+	return rad;
+}
+
+nodArb* rotatie_stanga(nodArb* rad) {
+	printf("\nRotatie stanga\n");
+	nodArb* nod1 = rad->right;
+	rad->right = nod1->left;
+	nod1->left = rad;
+	rad = nod1;
+	return rad;
+}
+
+nodArb* rotatie_stanga_dreapta(nodArb* rad) {
+	printf("\nRotatie stanga-dreapta\n");
+	nodArb* nod1 = rad->left;
+	nodArb* nod2 = nod1->right;
+	nod1->right = nod2->left;
+	nod2->left = nod1;
+	rad->left = nod2->right;
+	nod2->right = rad;
+	rad = nod2;
+	return rad;
+}
+
+nodArb* rotatie_dreapta_stanga(nodArb* rad) {
+	printf("\nRotatie dreapta-stanga\n");
+	nodArb* nod1 = rad->right;
+	nodArb* nod2 = nod1->left;
+	nod1->left = nod2->right;
+	nod2->right = nod1;
+	rad->right = nod2->left;
+	nod2->left = rad;
+	rad = nod2;
+	return rad;
+}
+
+nodArb* reechilibrare(nodArb* rad) {
+	calculBF(rad);
+	if (rad->BF <= -2 && rad->left->BF <= -1) { //<= pt orice caz
+		rad = rotatie_dreapta(rad);
+		calculBF(rad);
+	}
+	else if (rad->BF >= 2 && rad->right->BF >= 1) {
+		rad = rotatie_stanga(rad);
+		calculBF(rad);
+	}
+	else if (rad->BF <= -2 && rad->left->BF >= 1) {
+		rad = rotatie_stanga_dreapta(rad);
+		calculBF(rad);
+	}
+	else if (rad->BF >= 2 && rad->right->BF <= -1) {
+		rad = rotatie_dreapta_stanga(rad);
+		calculBF(rad);
+	}
+	return rad;
+}
+
+//stergeri
+nodArb* stergeRad(nodArb* rad) {
+	nodArb* aux = rad;
+	if (aux->left) {
+		rad = aux->left;
+		if (aux->right) {
+			nodArb* temp = aux->left;
+			while (temp->right) {
+				temp = temp->right;
+			}
+			temp->right = aux->right;
+		}
+	}
+	else { //nu am fiu stanga
+		if (aux->right) {
+			rad = aux->right;
+		}
+		else {
+			rad = NULL;
+		}
+		free(aux->inf.nume);
+		free(aux);
+
+	}
+	return rad;
+
+}
+
+
+nodArb* stergeNod(nodArb* rad, int cheie) {
+	if (rad == NULL) {
+		return NULL;
+	}
+	else {
+		if (rad->inf.cod == cheie) {
+			rad = stergeRad(rad);
+			return rad;
+		}
+		else {
+			nodArb* aux = rad; //caut
+			while (true) {
+				if (cheie < aux->inf.cod) {
+					//merg pe ramura stanga
+					if (aux->left == NULL) {
+						break; //nu am ce sterge
+					}
+					else {
+						if (aux->left->inf.cod == cheie) //l-am gasit in stanga
+						{
+							aux->left = stergeRad(aux->left);
+						}
+						else {
+							aux = aux->left;
+							//continui cautarea pe stanga
+						}
+					}
+				}
+				else {
+					if (cheie > aux->inf.cod) {
+						if (aux->right == NULL) {
+							break;
+						}
+						else {
+							if (aux->right->inf.cod == cheie) {
+								aux->right = stergeRad(aux->right);
+							}
+							else {
+								aux = aux->right;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return rad;
+}
+
 int main()
 {
 	nodArb* rad = NULL;
@@ -201,6 +355,7 @@ int main()
 	rad = inserare(a, rad);
 	rad = inserare(b, rad);
 	rad = inserare(c, rad);
+	rad = reechilibrare(rad); //avl
 
 	//parcurgere
 	inordine(rad);
@@ -226,6 +381,17 @@ int main()
 	}
 	free(vect); //nu am copiat numele pe componente ca sa il sterg
 	
+
+	printf("\n---------------------\n");
+	rad = stergeNod(rad, 3);
+	rad = reechilibrare(rad);
+	inordine(rad);
+	printf("\nSubarbore stang: \n");
+	inordine(rad->left);
+	printf("\nSubarbore drept: \n");
+	inordine(rad->right);
+	printf("\nInaltimea subarborelui stang: %d ", nrNiveluri(rad->left));
+	printf("\nInaltimea subarborelui drept: %d ", nrNiveluri(rad->right));
 	dezalocare(rad);
 }
 
