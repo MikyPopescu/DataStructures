@@ -17,7 +17,7 @@ struct nodld {
 	nodld* next;
 	nodld* prev;
 };
-//create a node
+
 nodls* creezNod(Student s) {
 	nodls* nou = (nodls*)malloc(sizeof(nodls));
 	nou->inf.nume = (char*)malloc((strlen(s.nume)+1)*sizeof(char));
@@ -30,7 +30,7 @@ nodls* creezNod(Student s) {
 	nou->next = NULL;
 	return nou;
 }
-//insert a node at the beginning of a list
+
 nodls* inserareInceput(nodls* cap, Student s) {
 	nodls* nou = creezNod(s);
 	if (cap == NULL) {
@@ -42,7 +42,7 @@ nodls* inserareInceput(nodls* cap, Student s) {
 	}
 	return cap;
 }
-//insert a node at the end of a list
+
 nodls* inserareFinal(nodls* cap, Student s) {
 	nodls* nou = creezNod(s);
 	if (cap == NULL) {
@@ -57,7 +57,7 @@ nodls* inserareFinal(nodls* cap, Student s) {
 	}
 	return cap;
 }
-//crossing the elements of a list
+
 void traversare(nodls* cap) {
 	nodls* temp = cap;
 	while (temp!=NULL) {
@@ -71,7 +71,7 @@ void traversare(nodls* cap) {
 		temp = temp->next;
 	}
 }
-//free memory
+
 void dezalocare(nodls* cap) {
 	nodls* temp = cap;
 	while (temp!=NULL) {
@@ -84,8 +84,6 @@ void dezalocare(nodls* cap) {
 }
 
 
-
-//no of Elements
 int nrNodLS(nodls* cap) {
 	int nr = 0;
 	nodls* temp = cap;
@@ -95,7 +93,7 @@ int nrNodLS(nodls* cap) {
 	}
 	return nr;
 }
-//nodul de pe o pozitie data
+
 nodls* nodDePePoz(nodls* cap, int poz) {
 	nodls* temp = cap;
 	int nr = 0;
@@ -109,32 +107,29 @@ nodls* nodDePePoz(nodls* cap, int poz) {
 	return NULL;
 
 }
-//convert: List to Array
+
 void convert(nodls** cap, Student** vect, int *nr) {
 	nodls* temp = *cap;
 	
 	while (temp != NULL) {
 
-		Student* copie = (Student*)malloc((*nr) * sizeof(Student));
+		Student* copie = (Student*)malloc((*nr) * sizeof(Student)); //copie va retine continutul lui vect pentru a nu pierde informatia la realocare
 		for (int i = 0; i < *nr; i++) {
-			copie[i] = (*vect)[i];
+			copie[i] = (*vect)[i]; //copiez continutul lui vect
 		}
-		*vect = (Student*)malloc((*nr + 1) * sizeof(Student));
-		(*nr)++;
+		*vect = (Student*)malloc((*nr + 1) * sizeof(Student)); //realoc
+		(*nr)++;  //cresc nr de elemente
 		for (int i = 0; i < *nr - 1; i++) {
-			(*vect)[i] = copie[i];
+			(*vect)[i] = copie[i];  //pun inapoi elementele din copie in vect
 		}
-		(*vect)[*nr - 1] = temp->inf;
-		nodls* temp2 = temp;
+		(*vect)[*nr - 1] = temp->inf;  //pun pe pozitia libera informatia 
+		nodls* temp2 = temp; //deplasez+eliberez memoria 
 		temp = temp->next;
 		free(temp2);
 		*cap = NULL;
 	}
-
-
 }
 
-//list sort
 void sortareListaSimpla(nodls* cap) {
 	int n = nrNodLS(cap);
 	for (int i = 0; i < n - 1; i++) {
@@ -150,7 +145,7 @@ void sortareListaSimpla(nodls* cap) {
 	}
 }
 
-//cautare element in lista
+
 nodls* cautaElemLS(nodls* cap, int poz) {
 	int n = nrNodLS(cap);
 	int i = 1;
@@ -219,6 +214,7 @@ int stergereLSId(nodls** cap, int nr) {
 	}
 
 	else{
+		//am mai multe elemente in lista
 		nodls* deSters = (*cap)->next;
 		nodls* anterior = *cap;
 		while (deSters != NULL && !gasit) {
@@ -272,15 +268,6 @@ int stergereLSPozitie(nodls** cap, int poz) {
 	return gasit == 1 ? 0 : -2;
 }
 
-
-
-
-
-
-
-
-
-
 //convert: LS to LD --problema la adaugarea in lista dubla
 nodld* conversieListaDubla(nodls** cap) {
 	nodld* capLD = NULL;
@@ -324,9 +311,6 @@ void traversareLD(nodld* cap) {
 		temp = temp->next;
 	}
 }
-//Sa se numere studentii din lista care au numarul de note >= decat o valoare data de la tastatura
-
-//Sa se calculeze media fiecarui student din lista
 
 int main()
 {
@@ -360,6 +344,8 @@ int main()
 	traversare(cap);
 
 	sortareListaSimpla(cap);
+	nodls* temp = cautaElemLS(cap, 2);
+	printf("\nElementul cautat:%s ",temp->inf.nume);
 	traversare(cap);
 
 	//testam stergerile
@@ -375,7 +361,7 @@ int main()
 	
 	Student* vect = NULL;
 	int nr = 0;
-	convert(&cap, &vect, &nr);
+	convert(&cap, &vect, &nr); 
 	for (int i = 0; i < nr; i++) {
 		printf("\nNume=%s ", vect[i].nume);
 	}
