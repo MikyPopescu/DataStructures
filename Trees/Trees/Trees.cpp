@@ -319,6 +319,47 @@ nodArb* stergeNod(nodArb* rad, int cheie) {
 	return rad;
 }
 
+
+int nrFrunze(nodArb* rad) {
+	if (rad != NULL) {
+		if (rad->left == NULL && rad->right == NULL) {
+			return 1;
+		}
+		else {
+			return nrFrunze(rad->left) + nrFrunze(rad->right);
+		}
+	}
+	else {
+		return 0;
+	}
+}
+
+void conversieVectorCod(nodArb* rad, int** vect, int* nr) {
+	if (rad != NULL) {
+		
+		int* copie = (int*)malloc(*nr * sizeof(int));
+		for (int i = 0; i < *nr; i++) {
+			copie[i] = (*vect)[i];
+		}
+
+		*vect = (int*)malloc((*nr + 1) * sizeof(int));
+		(*nr)++;
+
+		for (int i = 0; i < *nr - 1; i++) {
+			(*vect)[i] = copie[i];
+		}
+
+		(*vect)[*nr - 1] = rad->inf.cod;
+
+
+
+		conversieVectorCod(rad->left, vect, nr);
+		conversieVectorCod(rad->right, vect, nr);
+		
+	}
+	
+
+}
 int main()
 {
 	nodArb* rad = NULL;
@@ -392,6 +433,20 @@ int main()
 	inordine(rad->right);
 	printf("\nInaltimea subarborelui stang: %d ", nrNiveluri(rad->left));
 	printf("\nInaltimea subarborelui drept: %d ", nrNiveluri(rad->right));
+
+	printf("\nNr frunze %d", nrFrunze(rad));
+
+
+
+	//afiseaza gresit!
+	printf("\nVector de studenti: ");
+	int* vectID = NULL;
+	int nrID=0;
+	conversieVectorCod(rad, &vectID, &nrID);
+	for (int i = 0; i < nrID; i++) {
+		printf("\nCoduri studenti: %d", vect[i]);
+	}
+
 	dezalocare(rad);
 }
 
