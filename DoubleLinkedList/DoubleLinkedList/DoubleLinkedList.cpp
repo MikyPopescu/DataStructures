@@ -85,7 +85,7 @@ void stergeInceputLD(nodld** cap, nodld** coada) {
 			free(temp->inf.nume);
 			free(temp->inf.note);
 			free(temp);
-			(*cap)->prev = NULL;
+			//(*cap)->prev = NULL;
 		}
 	}
 }
@@ -134,6 +134,15 @@ void conversieVector(nodld** cap, student** vect, int *nr) {
 		free(temp2);
 		*cap = NULL;
 		
+	}
+}
+
+void conversie2(nodld** cap, student**vect, int* nr) {
+	nodld* temp = *cap;
+	while (temp != NULL) {
+		(*vect)[*nr] = temp->inf;
+		(*nr)++;
+		temp = temp->next;
 	}
 }
 nodls* conversieLS(nodld** cap, nodld** coada) {
@@ -215,7 +224,7 @@ int main()
 	}
 
 	//conversie lista vector
-	student* vect = NULL;
+	/*student* vect = NULL;
 	int nr = 0;
 	conversieVector(&cap, &vect, &nr);
 	for (int i = 0; i < nr; i++) {
@@ -224,8 +233,15 @@ int main()
 	for (int i = 0; i < nr; i++) {
 		free(vect[i].nume);
 	}
-	free(vect);
+	free(vect);*/
 
+	//test conversie 2
+	student* vect2 = (student*)malloc(10 * sizeof(student));
+	int nr2 = 0;
+	conversie2(&cap, &vect2, &nr2);
+	for (int i = 0; i < nr2; i++) {
+		printf("\nNume=%s ", vect2[i].nume);
+	}
 
 	//conversie in lista simpla
 	nodls* capLS = conversieLS(&cap, &coada);
