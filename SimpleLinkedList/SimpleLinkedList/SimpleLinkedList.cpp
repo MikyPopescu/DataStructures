@@ -129,6 +129,15 @@ void convert(nodls** cap, Student** vect, int *nr) {
 		cap = NULL;
 	}
 }
+void conversie(nodls** cap, Student** vect, int* nr) {
+	nodls* temp = *cap;
+	while (temp != NULL) {
+		(*vect)[*nr] = temp->inf;
+		(*nr)++;
+		temp = temp->next;
+	}
+
+}
 
 void sortareListaSimpla(nodls* cap) {
 	int n = nrNodLS(cap);
@@ -360,8 +369,8 @@ int main()
 	printf("\nAfisarea listei finale:");
 	traversare(cap);
 	
-	
-	Student* vect = NULL;
+	//test convert
+	/*Student* vect = NULL;
 	int nr = 0;
 	convert(&cap, &vect, &nr); 
 	for (int i = 0; i < nr; i++) {
@@ -370,12 +379,20 @@ int main()
 	for (int i = 0; i < nr; i++) {
 		free(vect[i].nume);
 	}
-	free(vect);
+	free(vect);*/
+
+	//test conversie
+	Student* vect2 = (Student*)malloc(10 * sizeof(Student));
+	int nr2 = 0;
+	conversie(&cap, &vect2, &nr2);
+	for (int i = 0; i < nr2; i++) {
+		printf("\nNume=%s ", vect2[i].nume);
+	}
 
 	//test conversie ls-ld 
 	nodld* capLD = conversieListaDubla(&cap);
 	printf("\nLista dubla: ");
-	traversareLD(capLD); //nu apare nimic?!
+	traversareLD(capLD); 
 	if (cap == NULL) {
 		printf("\nLista simpla a fost stearsa");
 	}
