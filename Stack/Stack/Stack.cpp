@@ -1,11 +1,9 @@
-// Workspacesdd.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
 
 #include "pch.h"
 #include <iostream>
 #include<stdio.h>
 #include<malloc.h>
-//mortii ei de lista simpla
+
 struct student {
 	int cod;
 	char* nume;
