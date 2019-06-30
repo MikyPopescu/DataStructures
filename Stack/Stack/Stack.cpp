@@ -108,6 +108,7 @@ void ConversieVector(nodStiva** varf, student** vect, int* nr) {
 		*varf = NULL;
 	}
 }
+//met 1
 nodls* conversieLS(nodStiva** varf, student s) {
 	nodls* capLS = NULL;
 
@@ -146,6 +147,27 @@ nodls* conversieLS(nodStiva** varf, student s) {
 
 	}
 	return capLS;
+}
+//met2
+void inserareLS(nodls** cap, student s) {
+	nodls* nou = (nodls*)malloc(sizeof(nodls));
+	nou->inf.cod = s.cod;
+	nou->inf.nume = (char*)malloc((strlen(s.nume) + 1) * sizeof(char));
+	strcpy(nou->inf.nume, s.nume);
+	nou->inf.nrNote = s.nrNote;
+	nou->inf.note = (int*)malloc(s.nrNote * sizeof(int));
+	nou->next = NULL;
+
+	if (*cap == NULL) {
+		*cap = nou;
+	}
+	else {
+		nodls* temp = *cap;
+		while (temp->next != NULL) {
+			temp = temp->next;
+		}
+		temp->next = nou;
+	}
 }
 void traversareLS(nodls* cap) {
 	nodls* temp = cap;
@@ -212,9 +234,15 @@ int main() {
 		printf("\nNume din vector: %s", vect[i].nume);
 	}*/
 
-
-	nodls* capLS = NULL;
+	//met 1
+	/*nodls* capLS = NULL;
 	capLS = conversieLS(&varf, a);
+	traversareLS(capLS);*/
+
+	//met 2
+	nodls* capLS = NULL;
+	inserareLS(&capLS, a);
+	inserareLS(&capLS, b);
 	traversareLS(capLS);
 	//traversare(varf);
 	dezalocare(varf);
