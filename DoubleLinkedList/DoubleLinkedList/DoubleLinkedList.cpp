@@ -89,6 +89,33 @@ void stergeInceputLD(nodld** cap, nodld** coada) {
 		}
 	}
 }
+int stergereDupaNrNote(nodld**cap, nodld** coada, int nr) {
+	int gasit = 0;
+	if (*cap == NULL && *coada == NULL) {
+		return -1;
+	}
+	if ((*cap)->inf.nrNote == nr) {
+		gasit = 1;
+		stergeInceputLD(cap, coada);
+	}
+	else {
+		nodld* temp = *cap;
+		while (!gasit && temp != NULL) {
+			if (temp->inf.nrNote == nr) {
+				gasit = 1;
+				nodld* deSters = temp;
+				temp = temp->prev;
+				temp->next = deSters->next;
+				deSters->prev = temp;
+				free(deSters->inf.note);
+				free(deSters->inf.nume);
+				free(deSters);
+			}
+			temp = temp->next;
+		}
+	}
+	return gasit == 1 ? 0 : -2;
+}
 void conversieVector(nodld** cap, student** vect, int *nr) {
 	nodld* temp = *cap;
 	while (temp != NULL) {
@@ -183,7 +210,9 @@ int main()
 	cap = inserare(cap, &coada, c);
 	traversare(cap);
 	traversareInvers(coada);
-	
+	if (stergereDupaNrNote(&cap, &coada, 1) == 0) {
+		printf("\n S-a sters elem");
+	}
 
 	//conversie lista vector
 	student* vect = NULL;

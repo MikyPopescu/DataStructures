@@ -125,8 +125,8 @@ void convert(nodls** cap, Student** vect, int *nr) {
 		(*vect)[*nr - 1] = temp->inf;  //pun pe pozitia libera informatia 
 		nodls* temp2 = temp; //deplasez+eliberez memoria 
 		temp = temp->next;
-		free(temp2);
-		*cap = NULL;
+    	free(temp2);
+		cap = NULL;
 	}
 }
 
@@ -271,7 +271,7 @@ int stergereLSPozitie(nodls** cap, int poz) {
 //convert: LS to LD --problema la adaugarea in lista dubla
 nodld* conversieListaDubla(nodls** cap) {
 	nodld* capLD = NULL;
-	while (*cap != NULL) {
+	if (*cap!=NULL ) { //while
 		nodld* nou = (nodld*)malloc(sizeof(nodld));
 		nou->inf.nume = (char*)malloc((strlen((*cap)->inf.nume) + 1) * sizeof(char));
 		strcpy(nou->inf.nume, (*cap)->inf.nume);
@@ -285,6 +285,8 @@ nodld* conversieListaDubla(nodls** cap) {
 		capLD = nou;
 		stergereLS_inceput(cap);
 		nodld* tempLD = capLD;
+		
+		
 		while (*cap) {
 			nodld* nou = (nodld*)malloc(sizeof(nodld));
 			nou->inf.nume = (char*)malloc((strlen((*cap)->inf.nume) + 1) * sizeof(char));
@@ -294,8 +296,8 @@ nodld* conversieListaDubla(nodls** cap) {
 			for (int i = 0; i < (*cap)->inf.nrNote; i++) {
 				nou->inf.note[i] = (*cap)->inf.note[i];
 			}
-			/*nou->next = NULL;
-			nou->prev = NULL;*/
+			nou->next = NULL;
+			nou->prev = NULL;
 			tempLD->next = nou;
 			nou->prev = tempLD;
 			tempLD = tempLD->next;
