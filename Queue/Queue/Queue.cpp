@@ -40,7 +40,7 @@ void put(nodCoada** prim, nodCoada** ultim, Student s) {
 	}
 }
 
-int get(nodCoada** prim, nodCoada** ultim, Student* s) {
+void get(nodCoada** prim, nodCoada** ultim, Student* s) {
 	if (*prim != NULL && *ultim != NULL) {
 		(*s).nume = (char*)malloc((strlen((*prim)->inf.nume) + 1) * sizeof(char));
 		strcpy((*s).nume, (*prim)->inf.nume);
@@ -54,12 +54,10 @@ int get(nodCoada** prim, nodCoada** ultim, Student* s) {
 		*prim = (*prim)->next;
 		free(aux->inf.nume);
 		free(aux->inf.note);
-		return 0;
 	}
 	else {
 		if (*prim == NULL) {
 			*ultim = NULL;
-			return -1;
 		}
 	}
 }
@@ -84,13 +82,7 @@ void dezalocare(nodCoada* prim) {
 		temp = temp2;
 	}
 }
-void conversieVector(nodCoada** prim, nodCoada** ultim, Student* vect, int *nr) {
-	Student s;
-	while (get(prim, ultim, &s) == 0) {
-		vect[*nr] = s;
-		(*nr)++;
-	}
-}
+
 
 //conversie stiva lista simpla
 void inserareLS(nodls** cap, Student s) {
@@ -139,6 +131,30 @@ void dezalocareLS(nodls** cap) {
 		temp = temp2;
 	}
 }
+
+void ConversieVector(nodCoada** prim, Student** vect, int* nr) {
+	nodCoada* temp = *prim;
+	while (temp != NULL) {
+		Student* copie = (Student*)malloc(*nr * sizeof(Student));
+		for (int i = 0; i < *nr; i++) {
+			copie[i] = (*vect)[i];
+		}
+
+		*vect = (Student*)malloc((*nr + 1) * sizeof(Student));
+		(*nr)++;
+
+		for (int i = 0; i < *nr - 1; i++) {
+			(*vect)[i] = copie[i];
+		}
+
+		(*vect)[*nr - 1] = temp->inf;
+		nodCoada* temp2 = temp;
+		temp = temp->next;
+
+		free(temp2);
+		*prim = NULL;
+	}
+}
 int main()
 {
 	nodCoada* prim = NULL;
@@ -171,17 +187,17 @@ int main()
 	put(&prim,&ultim, a);
 	put(&prim,&ultim, b);
 	put(&prim,&ultim,c);
+	put(&prim,&ultim,c);
+	get(&prim, &ultim, &c);
 	
 	traversare(prim);
-	
-	
-	//vector
+	Student* vect = NULL;
 	int nr = 0;
-	Student* vect = (Student*)malloc(10 * sizeof(Student));
-	conversieVector(&prim,&ultim, vect, &nr);
+	ConversieVector(&prim, &vect, &nr);
 	for (int i = 0; i < nr; i++) {
-		printf("\nNume %s are %d note ", vect[i].nume, vect[i].nrNote);
-	}
+		printf("\nNume din vector: %s", vect[i].nume);
+	};
+	
 	for (int i = 0; i < nr; i++) {
 		free(vect[i].note);
 		free(vect[i].nume);

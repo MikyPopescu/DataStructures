@@ -77,13 +77,13 @@ void inordine(nodArb* rad) {
 	}
 }
 
-int nrDepozite(nodArb* rad,const char* Secara) {
+int nrDepozite(nodArb* rad, char* Secara) {
 	int nr = 0;
 	if (rad != NULL) {
 		
 		for (int i = 0; i < rad->inf.nrCategoriiCereale; i++) {
 			if (strcmp(rad->inf.denumiriCereale[i], Secara) == 0) {
-				nr++;
+				nr=1;
 			}
 		}
 		return nr + nrDepozite(rad->left, Secara);
@@ -166,8 +166,10 @@ int main()
 
 	inordine(rad);
 
-	//cerinta2 --numara prost
+	//cerinta2 
 	printf("\n------------------------------------\n");
-	printf("\nNumar de depozite: %d", nrDepozite(rad, "Secara"));
+	char sec[20];
+	strcpy(sec, "secara");
+	printf("\nNumar de depozite: %d", nrDepozite(rad, sec));
 }
 
