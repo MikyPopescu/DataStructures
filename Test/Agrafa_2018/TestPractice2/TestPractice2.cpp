@@ -1,21 +1,26 @@
+
 #include "pch.h"
-#include <iostream>
 #include<stdio.h>
+#include <iostream>
 #include<malloc.h>
+
 struct Agrafa {
 	int codAgrafa;
 	int dimensiune;
 	char* culoare;
 };
+
 struct CutieAgrafe {
 	int codCutie;
 	int nrAgrafe;
 	Agrafa* agrafe;
 };
+
 struct nodls {
-	CutieAgrafe  inf;
+	CutieAgrafe inf;
 	nodls* next;
 };
+
 nodls* creezNod(CutieAgrafe ca){
 	nodls* nou = (nodls*)malloc(sizeof(nodls));
 	nou->inf.codCutie = ca.codCutie;
@@ -30,6 +35,7 @@ nodls* creezNod(CutieAgrafe ca){
 	nou->next = NULL;
 	return nou;
 }
+
 nodls* inserare(nodls* cap, CutieAgrafe c) {
 	nodls* nou = creezNod(c);
 	if (cap == NULL) {
@@ -48,6 +54,7 @@ nodls* inserare(nodls* cap, CutieAgrafe c) {
 	}
 	return cap;
 }
+
 void traversare(nodls* cap) {
 	if (cap) {
 		nodls* temp = cap;
@@ -86,43 +93,88 @@ void dezalocare(nodls* cap) {
 		free(temp2);
 	}
 }
-int stergereInceput(nodls** cap) {
+
+void stergereCodCutie(nodls** cap,int cod) {
+	//lista goala
 	if (*cap == NULL) {
-		return -1;
+		return;
 	}
-	else {
-		nodls* deSters = *cap;
-		*cap = (*cap)->next;
+	
+	//un singur nod in lista
+	if ((*cap)->inf.codCutie == cod && (*cap)->next == *cap) {
+		free((*cap)->inf.agrafe);
+		free((*cap));
+
+		*cap = NULL;
+	}
+	//caut elementul prin lista
+	nodls* temp = *cap;
+	//daca e primul element din lista
+	if ((*cap)->inf.codCutie == cod) {
+		while (temp->next != (*cap)) {
+			temp = temp->next;
+		}
+
+		temp->next = (*cap)->next;
+		free((*cap)->inf.agrafe);
+		free(*cap);
+
+		*cap = temp->next;
+	}
+	//caut in restul listei
+	while (temp->next != (*cap) && (*cap)->inf.codCutie == cod) {
+		temp = temp->next;
+	}
+
+	//iese din while cand a gasit nodul cautat / a ajuns din nou la cap
+	if ((*cap)->inf.codCutie == cod) {
+		nodls* deSters = temp->next;
+		temp->next = deSters->next;
+		
 		free(deSters->inf.agrafe);
 		free(deSters);
 	}
+
 }
-int stergereCodCutie(nodls** cap,int cod) {
-	int gasit = 0;
-	if (*cap == NULL) {
-		return -1;
-	}
-	//primul element are codCutie==cod
-	if ((*cap)->inf.codCutie == cod) {
-		gasit = 1;
-		stergereInceput(cap);
-	}
-	else {
-		nodls* deSters = (*cap)->next;
-		nodls* anterior = *cap;
-		while (deSters != NULL && !gasit) {
-			if (deSters->inf.codCutie == cod) {
-				gasit = 1;
-				anterior->next = deSters->next;
-				free(deSters->inf.agrafe);
-				free(deSters);
+
+void stergereDupaDim(nodls** cap, int dim) {
+	if (*cap) {
+		nodls* temp = *cap;
+		while (temp->next != *cap) {
+			if (temp->inf.agrafe->dimensiune <= dim) {
+				printf("\nCod cutie=%d,Nr agrafe=%d", temp->inf.codCutie, temp->inf.nrAgrafe);
+				if (temp->inf.nrAgrafe > 0) {
+					printf("\nAgrafele sunt: ");
+					for (int i = 0; i < temp->inf.nrAgrafe; i++) {
+						printf("\nCod agrafa=%d,Dimensiune=%d, Culoare=%s", temp->inf.agrafe[i].codAgrafa, temp->inf.agrafe[i].dimensiune, temp->inf.agrafe[i].culoare);
+					}
+				}
 			}
-			anterior = deSters;
-			deSters = deSters->next;
+			else {
+				stergereCodCutie(cap, temp->inf.codCutie);
+			}
+			
+			temp = temp->next;
 		}
+
+
+		if (temp->inf.agrafe->dimensiune <= dim) {
+			printf("\nCod cutie=%d,Nr agrafe=%d", temp->inf.codCutie, temp->inf.nrAgrafe);
+			if (temp->inf.nrAgrafe > 0) {
+				printf("\nAgrafele sunt: ");
+				for (int i = 0; i < temp->inf.nrAgrafe; i++) {
+					printf("\nCod agrafa=%d,Dimensiune=%d, Culoare=%s", temp->inf.agrafe[i].codAgrafa, temp->inf.agrafe[i].dimensiune, temp->inf.agrafe[i].culoare);
+				}
+			}
+		}
+		else {
+			stergereCodCutie(cap, temp->inf.codCutie);
+		}
+	
 	}
-	return gasit == 1 ? 0 : -2;
 }
+
+
 
 int main()
 {
@@ -209,11 +261,11 @@ int main()
 
 	//Cerinta 4
 	printf("\nStergere test\n");
-	stergereCodCutie(&cap, 300);
+	stergereCodCutie(&cap, 100);
 	traversare(cap);
 
 	//Cerinta 5
-	//????
+	stergereDupaDim(&cap, 40);
 
 	dezalocare(cap);
 }
