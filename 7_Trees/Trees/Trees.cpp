@@ -319,7 +319,7 @@ nodArb* stergeNod(nodArb* rad, int cheie) {
 	return rad;
 }
 
-
+//functie care numara numarul de frunze
 int nrFrunze(nodArb* rad) {
 	if (rad != NULL) {
 		if (rad->left == NULL && rad->right == NULL) {
@@ -331,6 +331,20 @@ int nrFrunze(nodArb* rad) {
 	}
 	else {
 		return 0;
+	}
+}
+
+//functie care sa numere cati studenti au nr note > 3
+void nrStudentiNrNote(nodArb *rad, int *nr){
+	if (rad != NULL) {
+		nrStudentiNrNote(rad->left, nr);
+		nrStudentiNrNote(rad->right, nr);
+
+		if (rad->inf.nrNote > 3) {
+			// printf("\nNume: %s", rad->inf.nume);
+			(*nr)++;
+
+		}
 	}
 }
 
@@ -386,17 +400,22 @@ int main()
 	c.cod = 3;
 	c.nume = (char*)malloc((strlen("Costel") + 1) * sizeof(char));
 	strcpy(c.nume, "Costel");
-	c.nrNote = 3;
+	c.nrNote = 4;
 	c.note = (int*)malloc(c.nrNote * sizeof(int));
 	c.note[0] = 10;
 	c.note[1] = 4;
 	c.note[2] = 8;
-	c.note[2] = 8;
+	c.note[3] = 8;
 
 	rad = inserare(a, rad);
 	rad = inserare(b, rad);
 	rad = inserare(c, rad);
 	rad = reechilibrare(rad); //avl
+
+	//test functie care numara
+	int numara = 0;
+	nrStudentiNrNote(rad, &numara);
+	printf("\nExista %d studenti cu mai mult de 3 note ", numara);
 
 	//parcurgere
 	inordine(rad);
@@ -439,13 +458,17 @@ int main()
 
 
 	//afiseaza gresit!
-	printf("\nVector de studenti: ");
-	int* vectID = NULL;
-	int nrID=0;
-	conversieVectorCod(rad, &vectID, &nrID);
-	for (int i = 0; i < nrID; i++) {
-		printf("\nCoduri studenti: %d", vect[i]);
-	}
+	//printf("\nVector de studenti: ");
+	//int* vectID = NULL;
+	//int nrID=0;
+	//conversieVectorCod(rad, &vectID, &nrID);
+	//for (int i = 0; i < nrID; i++) {
+	//	printf("\nCoduri studenti: %d", vect[i]);
+	//}
+
+
+
+
 
 	dezalocare(rad);
 }
