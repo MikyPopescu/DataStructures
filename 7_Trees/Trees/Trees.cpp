@@ -160,10 +160,29 @@ nodArb* cautare(nodArb* rad,int cheie){
 //conversie arbore vector
 void conversieVector(nodArb* rad, Student* vect, int* nr) {
 	if (rad != NULL) {
-		vect[*nr] = rad->inf;
+		/*vect[*nr] = rad->inf;
 		(*nr)++;
 		conversieVector(rad->left, vect, nr);
-		conversieVector(rad->right, vect, nr);
+		conversieVector(rad->right, vect, nr);*/
+
+		vect[*nr].cod = rad->inf.cod;
+		vect[*nr].nume = (char*)malloc((strlen(rad->inf.nume) + 1) * sizeof(char));
+		strcpy(vect[*nr].nume, rad->inf.nume);
+		vect[*nr].nrNote = rad->inf.nrNote;
+		vect[*nr].note = (int*)malloc(rad->inf.nrNote* sizeof(int));
+		for (int i = 0; i < rad->inf.nrNote; i++) {
+			vect[*nr].note[i] = rad->inf.note[i];
+		}
+		
+		
+		(*nr)++;
+
+		nodArb* st = rad->left;
+		nodArb* dr = rad->right;
+		free(rad->inf.nume);
+		free(rad);
+		conversieVector(st, vect, nr);
+		conversieVector(dr, vect, nr);
 	}
 }
 
@@ -457,18 +476,18 @@ int main()
 
 
 
-	//afiseaza gresit!
-	//printf("\nVector de studenti: ");
-	//int* vectID = NULL;
-	//int nrID=0;
-	//conversieVectorCod(rad, &vectID, &nrID);
-	//for (int i = 0; i < nrID; i++) {
-	//	printf("\nCoduri studenti: %d", vect[i]);
-	//}
-
-
-
-
+	//test conversie arbore - vector
+	/*Student *vectConversie = (Student*)malloc(3*sizeof(Student));
+	int nrElem = 0;
+	conversieVector(rad, vectConversie, &nrElem);
+	for(int i=0;i< nrElem;i++)
+		printf("\nCod=%d, Nume=%s, Medie=%5.2f", vectConversie[i].cod, vectConversie[i].nume, vectConversie[i].nrNote);
+	for (int i = 0; i < nrElem; i++) {
+		free(vectConversie[i].nume);
+		free(vectConversie[i].note);
+	}
+	free(vectConversie);
+	*/
 
 	dezalocare(rad);
 }
